@@ -8,20 +8,33 @@ namespace CSharpExamples
     {
         static void Main(string[] args)
         {
-            
+            #region Test Expression
 
-            Console.WriteLine("Hello World!");
+            //Expression<Func<int, bool>> comparer = number => number > 5;
+            //Func<int, bool> funcComparer = number =>
+            //{
+            //    return number > 5; //can have method body
+            //};
 
-            Expression<Func<User, object>> userExpression = user => user.Age;
+            //var compiled = comparer.Compile()(3);
+            //var compiled2 = comparer.Compile().Invoke(3); //both are same
+
+            #endregion
+
+            #region Expression Dump
+
+            //Expression<Func<User, object>> userExpression = user => user.Age;
             //Expression<Func<User, object>> userExpression = user => user.Name;
 
             //userExpression.Body.Dump();
+
+            #endregion
 
             #region Using Expressions
 
             var user = new User();
 
-            user.CreateUserUrl("Https://Test.com","age","name").Dump();
+            user.CreateUserUrl("Https://Test.com", "age", "name").Dump();
             user.CreateUserUrl("Https://Test.com", u => u.Age, u => u.Name).Dump();
 
             #endregion
@@ -50,13 +63,13 @@ namespace CSharpExamples
             {
                 var body = expression.Body;
 
-                if (body is MemberExpression me)
+                if (body is MemberExpression me) //Members of a class like string etc...
                 {
                     fields.Add(me.Member.Name.ToLower());
                 }
-                else if(body is UnaryExpression ue)
+                else if(body is UnaryExpression ue) //One input results in one output. Like constant values or Convert operation. In this case we are boxing int (for Age property) to object so there is a convert. But for string we do not need it 
                 {
-                    fields.Add(((MemberExpression)ue.Operand).Member.Name.ToLower());
+                    fields.Add(((MemberExpression)ue.Operand).Member.Name.ToLower()); //Operand is input of unary expression. In this case the Age property
                 }
             }
 
